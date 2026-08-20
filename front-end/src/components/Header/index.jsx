@@ -27,7 +27,7 @@ export default function Header() {
       {user && (
         <div className="header-user">
           <span>Olá, {user.nome}</span>
-          <span className="header-badge">{user.nivel_acesso}</span>
+          <span className="header-badge">{user.role}</span>
           <button onClick={handleLogout}>Sair</button>
         </div>
       )}

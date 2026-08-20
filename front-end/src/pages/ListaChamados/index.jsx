@@ -7,6 +7,7 @@ import "./style.css";
 export default function ListaChamados() {
   const [chamados, setChamados] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [motivos, setMotivos] = useState({}); // { [chamadoId]: "texto digitado" }
   const { user } = useAuth();
 
   async function carregarChamados() {
@@ -24,11 +25,22 @@ export default function ListaChamados() {
     carregarChamados();
   }, []);
 
+  function handleMotivoChange(id, valor) {
+    setMotivos((prev) => ({ ...prev, [id]: valor }));
+  }
+
   async function escalarChamado(id) {
+    const motivos = motivos[id]?.trim();
+
+    if(!motivos) {
+      toast.warning("Informe o motivo do escalonamento antes de continuar");
+      return
+    }
     try {
       // Envia objeto vazio para satisfazer a validação do TicketEscalateDTO caso o técnico seja opcional
-      await api.patch(`/tickets/${id}/escalar`, {});
+      await api.patch(`/tickets/${id}/escalar`, {motivos});
       toast.success("Chamado escalado com sucesso!");
+      setMotivos((prev) => ({ ...prev, [id]: "" }));
       carregarChamados();
     } catch (error) {
       toast.error(error.response?.data?.message || "Erro ao escalar chamado");
@@ -61,10 +73,18 @@ export default function ListaChamados() {
               <p><strong>Nível atual:</strong> {chamado.currentLevel}</p>
             </div>
 
-            {user?.role?.startsWith("TECNICO") && (
+            {user?.role?.startsWith("TECNICO") && chamado.currentLevel !== "N3" && (
+              <div className="chamado-escalation">
+                <input
+                  type="text"
+                  placeholder="Motivo do escalonamento"
+                  value={motivos[chamado.id] || ""}
+                  onChange={(e) => handleMotivoChange(chamado.id, e.target.value)}
+                />
               <button onClick={() => escalarChamado(chamado.id)}>
                 Encaminhar para próximo nível
               </button>
+            </div>
             )}
           </div>
         ))}
