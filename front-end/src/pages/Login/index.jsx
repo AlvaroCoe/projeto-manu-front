@@ -26,15 +26,15 @@ export default function Login() {
   async function onSubmit(data) {
     try {
       const response = await api.post("/auth/login", data);
-      
+
       // Separa o token do restante dos dados do usuário (id, nome, email, role)
       const { token, ...userData } = response.data;
-      
+
       // Envia o objeto do usuário e o token separadamente
       login(userData, token);
-      
+
       toast.success("Login realizado com sucesso!");
-      navigate("/chamados");
+      navigate("/"); // "/" = Abrir Chamado (HomePage), não "/chamados"
     } catch (error) {
       toast.error(error.response?.data?.message || "E-mail ou senha inválidos");
     }
