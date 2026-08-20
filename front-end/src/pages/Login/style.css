@@ -1,0 +1,76 @@
+.login-page {
+  width: 100%;
+  min-height: calc(100vh - 120px); /* ajusta a altura do Header/Footer, se precisar */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--spacing-md);
+}
+
+.login-form {
+  width: 100%;
+  max-width: 360px; /* trava em telas grandes, mas flui em telas pequenas */
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: var(--spacing-lg);
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+}
+
+.login-form h2 {
+  font-size: 1.4rem;
+  color: var(--color-text);
+  margin-bottom: var(--spacing-sm);
+  text-align: center;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs);
+}
+
+.login-form input {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  font-size: 1rem;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.login-form input:focus {
+  border-color: var(--color-primary);
+}
+
+.error {
+  color: var(--color-danger);
+  font-size: 0.8rem;
+}
+
+.login-form button {
+  width: 100%;
+  padding: 12px;
+  background-color: var(--color-primary);
+  color: white;
+  border: none;
+  border-radius: var(--radius-sm);
+  font-weight: 600;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.login-form button:hover {
+  background-color: var(--color-primary-dark);
+}
+
+/* Telas maiores: um pouco mais de respiro no card */
+@media (min-width: 768px) {
+  .login-form {
+    padding: var(--spacing-xl);
+  }
+}

@@ -1,0 +1,97 @@
+.homepage {
+  width: 100%;
+  padding: var(--spacing-md);
+  display: flex;
+  justify-content: center;
+}
+
+.chamado-form {
+  width: 100%;
+  max-width: 520px;
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: var(--spacing-lg);
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+}
+
+.chamado-form h2 {
+  font-size: 1.4rem;
+  color: var(--color-text);
+  margin-bottom: var(--spacing-sm);
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs);
+}
+
+.form-group label {
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: var(--color-text);
+}
+
+.chamado-form input,
+.chamado-form textarea,
+.chamado-form select {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  font-size: 1rem;
+  outline: none;
+  transition: border-color 0.2s;
+  background-color: var(--color-surface);
+}
+
+.chamado-form textarea {
+  resize: vertical;
+  min-height: 100px;
+}
+
+.chamado-form input:focus,
+.chamado-form textarea:focus,
+.chamado-form select:focus {
+  border-color: var(--color-primary);
+}
+
+.chamado-form input[type="file"] {
+  padding: 6px;
+  font-size: 0.9rem;
+}
+
+.error {
+  color: var(--color-danger);
+  font-size: 0.8rem;
+}
+
+.chamado-form button {
+  width: 100%;
+  padding: 12px;
+  background-color: var(--color-primary);
+  color: white;
+  border: none;
+  border-radius: var(--radius-sm);
+  font-weight: 600;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.chamado-form button:hover {
+  background-color: var(--color-primary-dark);
+}
+
+@media (min-width: 768px) {
+  .homepage {
+    padding: var(--spacing-xl);
+  }
+
+  .chamado-form {
+    padding: var(--spacing-xl);
+  }
+}
