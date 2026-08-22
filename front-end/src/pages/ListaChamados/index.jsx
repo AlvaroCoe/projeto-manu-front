@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import api from "../../services/api";
 import { useAuth } from "../../contexts/AuthContext";
+import ChamadoCard from "../../components/ChamadoCard";
 import "./style.css";
 
 export default function ListaChamados() {
@@ -14,8 +15,8 @@ export default function ListaChamados() {
       const response = await api.get("/tickets");
       setChamados(response.data);
     } catch (error) {
-      toast.error("Erro ao carregar chamados");
-    } finally {
+  toast.error(error.response?.data?.message || "Erro ao carregar chamados");
+} finally {
       setLoading(false);
     }
   }
@@ -24,14 +25,23 @@ export default function ListaChamados() {
     carregarChamados();
   }, []);
 
-  async function escalarChamado(id) {
+  async function escalarChamado(id, motivo) {
     try {
-      // Envia objeto vazio para satisfazer a validação do TicketEscalateDTO caso o técnico seja opcional
-      await api.patch(`/tickets/${id}/escalar`, {});
+      await api.patch(`/tickets/${id}/escalar`, { motivo });
       toast.success("Chamado escalado com sucesso!");
       carregarChamados();
     } catch (error) {
       toast.error(error.response?.data?.message || "Erro ao escalar chamado");
+    }
+  }
+
+  async function atualizarStatus(id, status) {
+    try {
+      await api.patch(`/tickets/${id}/status`, { status });
+      toast.success("Status atualizado!");
+      carregarChamados();
+    } catch (error) {
+      toast.error(error.response?.data?.message || "Erro ao atualizar status");
     }
   }
 
@@ -47,26 +57,13 @@ export default function ListaChamados() {
 
       <div className="chamados-grid">
         {chamados.map((chamado) => (
-          <div key={chamado.id} className="chamado-card">
-            <div className="chamado-card-header">
-              <h3>{chamado.titulo}</h3>
-              <span className={`badge-prioridade prioridade-${chamado.prioridade?.toLowerCase()}`}>
-                {chamado.prioridade}
-              </span>
-            </div>
-
-            <div className="chamado-card-info">
-              <p><strong>Status:</strong> {chamado.status}</p>
-              {/* Corrigido de chamado.nivel_atual para chamado.currentLevel */}
-              <p><strong>Nível atual:</strong> {chamado.currentLevel}</p>
-            </div>
-
-            {user?.role?.startsWith("TECNICO") && (
-              <button onClick={() => escalarChamado(chamado.id)}>
-                Encaminhar para próximo nível
-              </button>
-            )}
-          </div>
+          <ChamadoCard
+            key={chamado.id}
+            chamado={chamado}
+            isTecnico={user?.role?.startsWith("TECNICO")}
+            onEscalar={escalarChamado}
+            onAtualizarStatus={atualizarStatus}
+          />
         ))}
       </div>
     </div>

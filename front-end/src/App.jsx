@@ -13,31 +13,33 @@ export default function App() {
   return (
     <AuthProvider>
       <BrowserRouter>
-        <Header />
-        <Routes>
-          <Route path="/login" element={<Login />} />
-          <Route
-            path="/"
-            element={
-              <PrivateRoute>
-                <HomePage />
-              </PrivateRoute>
-            }
-          />
-          <Route
-            path="/chamados"
-            element={
-              <PrivateRoute>
-                <ListaChamados />
-              </PrivateRoute>
-            }
-          />
-        </Routes>
-        <Footer />
+        <div className="app-shell">
+          <Header />
+          <main className="app-main">
+            <Routes>
+              <Route path="/login" element={<Login />} />
+              <Route
+                path="/"
+                element={
+                  <PrivateRoute>
+                    <HomePage />
+                  </PrivateRoute>
+                }
+              />
+              <Route
+                path="/chamados"
+                element={
+                  <PrivateRoute>
+                    <ListaChamados />
+                  </PrivateRoute>
+                }
+              />
+            </Routes>
+          </main>
+          <Footer />
+        </div>
         <ToastContainer position="top-right" />
       </BrowserRouter>
     </AuthProvider>
-
-    
   );
 }
