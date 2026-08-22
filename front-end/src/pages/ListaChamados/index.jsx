@@ -8,6 +8,7 @@ import "./style.css";
 export default function ListaChamados() {
   const [chamados, setChamados] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [motivos, setMotivos] = useState({}); // { [chamadoId]: "texto digitado" }
   const { user } = useAuth();
 
   async function carregarChamados() {
@@ -25,14 +26,36 @@ export default function ListaChamados() {
     carregarChamados();
   }, []);
 
-  async function escalarChamado(id, motivo) {
+  function handleMotivoChange(id, valor) {
+    setMotivos((prev) => ({ ...prev, [id]: valor }));
+  }
+
+  async function escalarChamado(id) {
+    const motivo = motivos[id]?.trim();
+
+    if(!motivo) {
+      toast.warning("Informe o motivo do escalonamento antes de continuar");
+      return
+    }
     try {
-      await api.patch(`/tickets/${id}/escalar`, { motivo });
+      // Envia objeto vazio para satisfazer a validação do TicketEscalateDTO caso o técnico seja opcional
+      await api.patch(`/tickets/${id}/escalar`, {motivo});
       toast.success("Chamado escalado com sucesso!");
+      setMotivos((prev) => ({ ...prev, [id]: "" }));
       carregarChamados();
     } catch (error) {
       toast.error(error.response?.data?.message || "Erro ao escalar chamado");
     }
+  }
+  async function finalizarChamado(id) {
+    try{
+      await api.patch(`/tickets/${id}/status`, { status: "FINALIZADO"});
+      toast.success("Chamado finalizado com sucesso");
+      carregarChamados();
+    } catch (error){
+      toast.error(error.response?.data?.message || "Erro ao finalizar chamado");
+    }
+    
   }
 
   async function atualizarStatus(id, status) {

@@ -45,23 +45,25 @@ export default function HomePage() {
     carregarEquipamentos();
   }, []);
 
-  async function onSubmit(data) {
-    const payload = {
-      titulo: data.titulo,
-      descricao: data.descricao,
-      prioridade: data.prioridade,
-      clientId: user?.id,
-      equipamentoId: Number(data.equipamentoId),
-    };
 
-    try {
-      await api.post("/tickets", payload);
-      toast.success("Chamado aberto com sucesso!");
-      reset();
-      navigate("/chamados");
-    } catch (error) {
-      toast.error(error.response?.data?.message || "Erro ao abrir chamado");
-    }
+  async function onSubmit(data) {
+  // Ajuste do payload JSON correspondente ao DTO do Spring Boot
+  const payload = {
+    titulo: data.titulo,
+    descricao: data.descricao,
+    prioridade: data.prioridade,
+    clientId: user?.id,
+    equipamentoId: Number(data.equipamentoId),
+    // Adicione os IDs necessários caso seu TicketCreateDTO exija
+  };
+
+  try {
+    await api.post("/tickets", payload);
+    toast.success("Chamado aberto com sucesso!");
+    reset();
+    navigate("/chamados"); // Redireciona direto para a lista após criar
+  } catch (error) {
+    toast.error(error.response?.data?.message || "Erro ao abrir chamado");
   }
 
   return (
