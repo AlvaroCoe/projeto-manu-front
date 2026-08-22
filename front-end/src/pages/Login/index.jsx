@@ -34,7 +34,7 @@ export default function Login() {
       login(userData, token);
       
       toast.success("Login realizado com sucesso!");
-      navigate("/chamados");
+      navigate("/");
     } catch (error) {
       toast.error(error.response?.data?.message || "E-mail ou senha inválidos");
     }
