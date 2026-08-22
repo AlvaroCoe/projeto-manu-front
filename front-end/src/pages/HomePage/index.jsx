@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
@@ -63,7 +64,7 @@ export default function HomePage() {
     reset();
     navigate("/chamados"); // Redireciona direto para a lista após criar
   } catch (error) {
-    toast.error(toast.error(error.response?.data?.message || "Erro ao abrir chamado"));
+    toast.error(error.response?.data?.message || "Erro ao abrir chamado");
   }
 }
 

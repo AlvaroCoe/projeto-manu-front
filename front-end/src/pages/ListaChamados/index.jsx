@@ -30,21 +30,31 @@ export default function ListaChamados() {
   }
 
   async function escalarChamado(id) {
-    const motivos = motivos[id]?.trim();
+    const motivo = motivos[id]?.trim();
 
-    if(!motivos) {
+    if(!motivo) {
       toast.warning("Informe o motivo do escalonamento antes de continuar");
       return
     }
     try {
       // Envia objeto vazio para satisfazer a validação do TicketEscalateDTO caso o técnico seja opcional
-      await api.patch(`/tickets/${id}/escalar`, {motivos});
+      await api.patch(`/tickets/${id}/escalar`, {motivo});
       toast.success("Chamado escalado com sucesso!");
       setMotivos((prev) => ({ ...prev, [id]: "" }));
       carregarChamados();
     } catch (error) {
       toast.error(error.response?.data?.message || "Erro ao escalar chamado");
     }
+  }
+  async function finalizarChamado(id) {
+    try{
+      await api.patch(`/tickets/${id}/status`, { status: "FINALIZADO"});
+      toast.success("Chamado finalizado com sucesso");
+      carregarChamados();
+    } catch (error){
+      toast.error(error.response?.data?.message || "Erro ao finalizar chamado");
+    }
+    
   }
 
   if (loading) return <p className="lista-status">Carregando...</p>;
@@ -73,7 +83,16 @@ export default function ListaChamados() {
               <p><strong>Nível atual:</strong> {chamado.currentLevel}</p>
             </div>
 
-            {user?.role?.startsWith("TECNICO") && chamado.currentLevel !== "N3" && (
+            {user?.role?.startsWith("TECNICO") && chamado.status !== "FINALIZADO" &&  (
+              <div className="chamado-acoes">
+                <button
+                  className="btn-finalizar"
+                  onClick={() => finalizarChamado(chamado.id)}
+                >
+                  Finalizar Chamado
+                </button>
+              
+              {chamado.currentLevel !== "N3" &&(
               <div className="chamado-escalation">
                 <input
                   type="text"
