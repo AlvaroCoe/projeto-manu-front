@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
+import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import api from "../../services/api";
 import { useAuth } from "../../contexts/AuthContext";
@@ -25,7 +25,7 @@ export default function HomePage() {
     resolver: yupResolver(schema),
   });
 
-  const{user} = useAuth();
+  const { user } = useAuth();
   const navigate = useNavigate();
   const [equipamentos, setEquipamentos] = useState([]);
   const [loadingEquipamentos, setLoadingEquipamentos] = useState(true);
@@ -35,8 +35,7 @@ export default function HomePage() {
       try {
         const response = await api.get("/equipamentos");
         setEquipamentos(response.data);
-      
-      }catch {
+      } catch {
         toast.error("Erro ao carregar equipamentos");
       } finally {
         setLoadingEquipamentos(false);
@@ -66,7 +65,6 @@ export default function HomePage() {
   } catch (error) {
     toast.error(error.response?.data?.message || "Erro ao abrir chamado");
   }
-}
 
   return (
     <div className="homepage">
@@ -108,21 +106,19 @@ export default function HomePage() {
             {...register("equipamentoId")}
             defaultValue=""
             disabled={loadingEquipamentos}
-            >
-              <option value="" disabled>
-                {loadingEquipamentos ? "Carregando equipamentos..." : "Selecione o equipamento"}
+          >
+            <option value="" disabled>
+              {loadingEquipamentos ? "Carregando equipamentos..." : "Selecione o equipamento"}
+            </option>
+            {equipamentos.map((equipamento) => (
+              <option key={equipamento.id} value={equipamento.id}>
+                {equipamento.nome} - {equipamento.codigoPatrimonio}
               </option>
-              {equipamentos.map((equipamento) => (
-                <option key={equipamento.id} value={equipamento.id}>
-                  {equipamento.nome} - {equipamento.codigoPatrimonio}
-                </option>
-              ))}
-            </select>
-            {errors.equipamentoId && <span className="error">{errors.equipamentoId.message}</span>}
+            ))}
+          </select>
+          {errors.equipamentoId && <span className="error">{errors.equipamentoId.message}</span>}
         </div>
-        
-        
-        
+
         <div className="form-group">
           <label htmlFor="foto">Foto do problema (opcional)</label>
           <input id="foto" type="file" accept="image/*" {...register("foto")} />

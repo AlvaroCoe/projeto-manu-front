@@ -31,5 +31,24 @@ O que mudou: só a linha 31 — trocou user.nivel_acesso por user.role (o resto 
 
 
 
+Instalando dependências:
+
+npm i react-router-dom axios react-toastify yup react-hook-form @hookform/resolvers
+
+Criando branchs e salvando projetos:
+
+git branch
+
+git checkout -b nome-da-branch
+
+// Faça seu código
+
+git add .
+
+git commit -m "..."
+
+git push -u origin nome-da-branch
+
+// Criar pull request no repositório github
 
 
