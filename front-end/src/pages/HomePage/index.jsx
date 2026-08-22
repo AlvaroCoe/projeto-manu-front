@@ -1,14 +1,18 @@
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
+import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import api from "../../services/api";
+import { useAuth } from "../../contexts/AuthContext";
 import "./style.css";
 
 const schema = yup.object({
   titulo: yup.string().required("Informe o título"),
   descricao: yup.string().required("Descreva o problema"),
   prioridade: yup.string().required("Selecione a prioridade"),
+  equipamentoId: yup.string().required("Selecione o equipamento"),
 });
 
 export default function HomePage() {
@@ -21,24 +25,44 @@ export default function HomePage() {
     resolver: yupResolver(schema),
   });
 
-  async function onSubmit(data) {
-  // Ajuste do payload JSON correspondente ao DTO do Spring Boot
-  const payload = {
-    titulo: data.titulo,
-    descricao: data.descricao,
-    prioridade: data.prioridade,
-    // Adicione os IDs necessários caso seu TicketCreateDTO exija
-  };
+  const { user } = useAuth();
+  const navigate = useNavigate();
+  const [equipamentos, setEquipamentos] = useState([]);
+  const [loadingEquipamentos, setLoadingEquipamentos] = useState(true);
 
-  try {
-    await api.post("/tickets", payload);
-    toast.success("Chamado aberto com sucesso!");
-    reset();
-    navigate("/chamados"); // Redireciona direto para a lista após criar
-  } catch (error) {
-    toast.error("Erro ao abrir chamado");
+  useEffect(() => {
+    async function carregarEquipamentos() {
+      try {
+        const response = await api.get("/equipamentos");
+        setEquipamentos(response.data);
+      } catch {
+        toast.error("Erro ao carregar equipamentos");
+      } finally {
+        setLoadingEquipamentos(false);
+      }
+    }
+
+    carregarEquipamentos();
+  }, []);
+
+  async function onSubmit(data) {
+    const payload = {
+      titulo: data.titulo,
+      descricao: data.descricao,
+      prioridade: data.prioridade,
+      clientId: user?.id,
+      equipamentoId: Number(data.equipamentoId),
+    };
+
+    try {
+      await api.post("/tickets", payload);
+      toast.success("Chamado aberto com sucesso!");
+      reset();
+      navigate("/chamados");
+    } catch (error) {
+      toast.error(error.response?.data?.message || "Erro ao abrir chamado");
+    }
   }
-}
 
   return (
     <div className="homepage">
@@ -71,6 +95,26 @@ export default function HomePage() {
             <option value="ALTA">Alta</option>
           </select>
           {errors.prioridade && <span className="error">{errors.prioridade.message}</span>}
+        </div>
+
+        <div className="form-group">
+          <label htmlFor="equipamentoId">Equipamento</label>
+          <select
+            id="equipamentoId"
+            {...register("equipamentoId")}
+            defaultValue=""
+            disabled={loadingEquipamentos}
+          >
+            <option value="" disabled>
+              {loadingEquipamentos ? "Carregando equipamentos..." : "Selecione o equipamento"}
+            </option>
+            {equipamentos.map((equipamento) => (
+              <option key={equipamento.id} value={equipamento.id}>
+                {equipamento.nome} - {equipamento.codigoPatrimonio}
+              </option>
+            ))}
+          </select>
+          {errors.equipamentoId && <span className="error">{errors.equipamentoId.message}</span>}
         </div>
 
         <div className="form-group">
