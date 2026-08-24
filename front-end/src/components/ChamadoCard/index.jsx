@@ -40,7 +40,7 @@ export default function ChamadoCard({ chamado, isTecnico, onEscalar, onAtualizar
 
       {isTecnico && (
         <div className="chamado-card-actions">
-          {podeEscalar && (
+          {podeEscalar ? (
             <div className="chamado-card-action">
               <input
                 type="text"
@@ -56,6 +56,12 @@ export default function ChamadoCard({ chamado, isTecnico, onEscalar, onAtualizar
                 Encaminhar para próximo nível
               </button>
             </div>
+          ) : (
+            chamado.currentLevel === "N3" && (
+              <p className="chamado-card-nivel-maximo">
+                Você já está no nível mais alto (N3).
+              </p>
+            )
           )}
 
           <div className="chamado-card-action">
