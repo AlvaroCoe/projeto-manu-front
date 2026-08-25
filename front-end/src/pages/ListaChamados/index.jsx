@@ -45,6 +45,26 @@ export default function ListaChamados() {
     }
   }
 
+  async function pegarChamado(id) {
+    try {
+      await api.patch(`/tickets/${id}/pegar`);
+      toast.success("Chamado assumido com sucesso!");
+      carregarChamados();
+    } catch (error) {
+      toast.error(error.response?.data?.message || "Erro ao assumir chamado");
+    }
+  }
+
+  async function cancelarChamado(id, motivo) {
+    try {
+      await api.patch(`/tickets/${id}/cancelar`, { motivo });
+      toast.success("Chamado cancelado.");
+      carregarChamados();
+    } catch (error) {
+      toast.error(error.response?.data?.message || "Erro ao cancelar chamado");
+    }
+  }
+
   if (loading) return <p className="lista-status">Carregando...</p>;
 
   return (
@@ -63,6 +83,8 @@ export default function ListaChamados() {
             isTecnico={user?.role?.startsWith("TECNICO")}
             onEscalar={escalarChamado}
             onAtualizarStatus={atualizarStatus}
+            onPegar={pegarChamado}
+            onCancelar={cancelarChamado}
           />
         ))}
       </div>
