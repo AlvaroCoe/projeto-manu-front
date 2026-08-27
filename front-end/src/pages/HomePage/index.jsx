@@ -29,6 +29,7 @@ export default function HomePage() {
   const navigate = useNavigate();
   const [equipamentos, setEquipamentos] = useState([]);
   const [loadingEquipamentos, setLoadingEquipamentos] = useState(true);
+  const [enviando, setEnviando] = useState(false);
 
   useEffect(() => {
     async function carregarEquipamentos() {
@@ -46,21 +47,42 @@ export default function HomePage() {
   }, []);
 
   async function onSubmit(data) {
-    const payload = {
-      titulo: data.titulo,
-      descricao: data.descricao,
-      prioridade: data.prioridade,
-      clientId: user?.id,
-      equipamentoId: Number(data.equipamentoId),
-    };
-
+    setEnviando(true);
     try {
+      let imageUrl = null;
+      const arquivo = data.foto?.[0];
+
+      if (arquivo) {
+        if (arquivo.size > 5 * 1024 * 1024) {
+          toast.error("A imagem deve ter no máximo 5MB");
+          setEnviando(false);
+          return;
+        }
+
+        const formData = new FormData();
+        formData.append("file", arquivo);
+
+        const uploadResponse = await api.post("/upload", formData);
+        imageUrl = uploadResponse.data.url;
+      }
+
+      const payload = {
+        titulo: data.titulo,
+        descricao: data.descricao,
+        prioridade: data.prioridade,
+        clientId: user?.id,
+        equipamentoId: Number(data.equipamentoId),
+        imageUrl,
+      };
+
       await api.post("/tickets", payload);
       toast.success("Chamado aberto com sucesso!");
       reset();
       navigate("/chamados");
     } catch (error) {
       toast.error(error.response?.data?.message || "Erro ao abrir chamado");
+    } finally {
+      setEnviando(false);
     }
   }
 
@@ -122,7 +144,9 @@ export default function HomePage() {
           <input id="foto" type="file" accept="image/*" {...register("foto")} />
         </div>
 
-        <button type="submit">Abrir Chamado</button>
+        <button type="submit" disabled={enviando}>
+          {enviando ? "Enviando..." : "Abrir Chamado"}
+        </button>
       </form>
     </div>
   );

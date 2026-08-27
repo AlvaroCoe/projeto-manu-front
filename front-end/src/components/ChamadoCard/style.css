@@ -158,3 +158,11 @@
   color: var(--color-text);
   margin-bottom: 2px;
 }
+
+.chamado-card-foto {
+  width: 100%;
+  max-height: 160px;
+  object-fit: cover;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--color-border);
+}

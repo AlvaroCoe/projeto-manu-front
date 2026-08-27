@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { toast } from "react-toastify";
-import api from "../../services/api";
+import api, { API_BASE_URL } from "../../services/api";
 import "./style.css";
 
 export default function ChamadoCard({ chamado, isTecnico, onEscalar, onAtualizarStatus, onPegar, onCancelar }) {
@@ -49,7 +49,7 @@ export default function ChamadoCard({ chamado, isTecnico, onEscalar, onAtualizar
         const response = await api.get(`/tickets/${chamado.id}/comments`);
         setComentarios(response.data);
         setComentariosCarregados(true);
-      } catch (error) {
+      } catch {
         toast.error("Erro ao carregar comentários");
       }
     }
@@ -93,6 +93,13 @@ export default function ChamadoCard({ chamado, isTecnico, onEscalar, onAtualizar
             : "Ninguém assumiu esse chamado ainda"}
         </p>
       </div>
+      {chamado.imageUrl && (
+  <img
+    src={`${API_BASE_URL}${chamado.imageUrl}`}
+    alt="Foto do problema"
+    className="chamado-card-foto"
+  />
+)}
 
       {isTecnico && !chamadoEncerrado && (
         <div className="chamado-card-actions">
