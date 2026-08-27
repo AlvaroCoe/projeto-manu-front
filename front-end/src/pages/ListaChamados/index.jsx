@@ -80,7 +80,7 @@ export default function ListaChamados() {
           <ChamadoCard
             key={chamado.id}
             chamado={chamado}
-            isTecnico={user?.role?.startsWith("TECNICO")}
+            usuarioLogado={user}
             onEscalar={escalarChamado}
             onAtualizarStatus={atualizarStatus}
             onPegar={pegarChamado}

@@ -3,7 +3,7 @@ import { toast } from "react-toastify";
 import api, { API_BASE_URL } from "../../services/api";
 import "./style.css";
 
-export default function ChamadoCard({ chamado, isTecnico, onEscalar, onAtualizarStatus, onPegar, onCancelar }) {
+export default function ChamadoCard({ chamado, usuarioLogado, onEscalar, onAtualizarStatus, onPegar, onCancelar }) {
   const [motivo, setMotivo] = useState("");
   const [erroMotivo, setErroMotivo] = useState("");
   const [novoStatus, setNovoStatus] = useState("");
@@ -72,6 +72,21 @@ export default function ChamadoCard({ chamado, isTecnico, onEscalar, onAtualizar
     }
   }
 
+  /* Nível do técnicop logado*/ 
+
+  const nivelDoUsuario = usuarioLogado?.role?.startsWith("TECNICO")
+    ? usuarioLogado.role.replace("TECNICO_", "")
+    : null;
+  const isTecnico = !!nivelDoUsuario;
+
+
+/* Só pode agir quem for do nível atual do chamado ou quem é responsável */ 
+
+  const ehTecnicoResponsavel = chamado.technician?.id === usuarioLogado?.id;
+  const estaNoNivelDoChamado = nivelDoUsuario === chamado.currentLevel;
+  const podeAgir = isTecnico && (estaNoNivelDoChamado || ehTecnicoResponsavel);
+
+
   const podeEscalar = isTecnico && chamado.currentLevel !== "N3";
   const chamadoEncerrado = chamado.status === "CANCELADO" || chamado.status === "FINALIZADO";
 
@@ -101,7 +116,7 @@ export default function ChamadoCard({ chamado, isTecnico, onEscalar, onAtualizar
   />
 )}
 
-      {isTecnico && !chamadoEncerrado && (
+      {podeAgir&& !chamadoEncerrado && (
         <div className="chamado-card-actions">
           {!chamado.technician && (
             <div className="chamado-card-action">
@@ -130,7 +145,7 @@ export default function ChamadoCard({ chamado, isTecnico, onEscalar, onAtualizar
           ) : (
             chamado.currentLevel === "N3" && (
               <p className="chamado-card-nivel-maximo">
-                Você já está no nível mais alto (N3).
+                O chamado já está no nível mais alto (N3).
               </p>
             )
           )}
@@ -158,6 +173,13 @@ export default function ChamadoCard({ chamado, isTecnico, onEscalar, onAtualizar
             </button>
           </div>
         </div>
+      )}
+      {isTecnico && !podeAgir && !chamadoEncerrado &&(
+        <p className="chamado-card-nivel-maximo">
+          Este chamado está em atendimento no nível {chamado.currentLevel}.
+          Você pode comentar, mas não alterar.
+
+        </p>
       )}
 
       {chamadoEncerrado && (
