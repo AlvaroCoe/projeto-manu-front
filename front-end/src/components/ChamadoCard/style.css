@@ -166,3 +166,28 @@
   border-radius: var(--radius-sm);
   border: 1px solid var(--color-border);
 }
+
+.chamado-card-badges {
+  display: flex;
+  gap: 6px;
+  flex-shrink: 0;
+}
+
+.badge-sla {
+  font-size: 0.7rem;
+  font-weight: 700;
+  padding: 3px 10px;
+  border-radius: var(--radius-sm);
+  white-space: nowrap;
+  text-transform: uppercase;
+}
+
+.sla-no-prazo {
+  background-color: #dcfce7;
+  color: var(--color-success);
+}
+
+.sla-atrasado {
+  background-color: #fee2e2;
+  color: var(--color-danger);
+}

@@ -79,27 +79,44 @@ export default function ChamadoCard({ chamado, isTecnico, onEscalar, onAtualizar
     <div className="chamado-card">
       <div className="chamado-card-header">
         <h3>{chamado.titulo}</h3>
-        <span className={`badge-prioridade prioridade-${chamado.prioridade?.toLowerCase()}`}>
-          {chamado.prioridade}
-        </span>
+        <div className="chamado-card-badges">
+          <span className={`badge-prioridade prioridade-${chamado.prioridade?.toLowerCase()}`}>
+            {chamado.prioridade}
+          </span>
+          <span className={`badge-sla ${chamado.atrasado ? "sla-atrasado" : "sla-no-prazo"}`}>
+            {chamadoEncerrado
+              ? (chamado.atrasado ? "Resolvido com atraso" : "Resolvido no prazo")
+              : (chamado.atrasado ? "Atrasado" : "No prazo")}
+          </span>
+        </div>
       </div>
 
       <div className="chamado-card-info">
         <p><strong>Status:</strong> {chamado.status}</p>
         <p><strong>Nível atual:</strong> {chamado.currentLevel}</p>
+        <p>
+          <strong>Prazo:</strong>{" "}
+          {new Date(chamado.prazoLimite).toLocaleString("pt-BR", {
+            day: "2-digit",
+            month: "2-digit",
+            hour: "2-digit",
+            minute: "2-digit",
+          })}
+        </p>
         <p className="chamado-card-tecnico">
           {chamado.technician
             ? `Responsável: ${chamado.technician.nome}`
             : "Ninguém assumiu esse chamado ainda"}
         </p>
       </div>
+
       {chamado.imageUrl && (
-  <img
-    src={`${API_BASE_URL}${chamado.imageUrl}`}
-    alt="Foto do problema"
-    className="chamado-card-foto"
-  />
-)}
+        <img
+          src={`${API_BASE_URL}${chamado.imageUrl}`}
+          alt="Foto do problema"
+          className="chamado-card-foto"
+        />
+      )}
 
       {isTecnico && !chamadoEncerrado && (
         <div className="chamado-card-actions">
