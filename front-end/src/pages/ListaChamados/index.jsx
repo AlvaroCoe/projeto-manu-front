@@ -12,7 +12,15 @@ export default function ListaChamados() {
 
   async function carregarChamados() {
     try {
-      const response = await api.get("/tickets");
+      // SOLICITANTE vê só os próprios chamados; TÉCNICO vê a fila do seu nível de suporte
+      const params = {};
+      if (user?.role === "SOLICITANTE") {
+        params.clientId = user.id;
+      } else if (user?.role?.startsWith("TECNICO")) {
+        params.nivel = user.role.replace("TECNICO_", "");
+      }
+
+      const response = await api.get("/tickets", { params });
       setChamados(response.data);
     } catch (error) {
       toast.error(error.response?.data?.message || "Erro ao carregar chamados");
@@ -22,8 +30,9 @@ export default function ListaChamados() {
   }
 
   useEffect(() => {
-    carregarChamados();
-  }, []);
+    if (user) carregarChamados();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [user]);
 
   async function escalarChamado(id, motivo) {
     try {

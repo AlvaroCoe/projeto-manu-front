@@ -72,7 +72,7 @@ export default function ChamadoCard({ chamado, usuarioLogado, onEscalar, onAtual
     }
   }
 
-  /* Nível do técnicop logado*/ 
+  /* Nível do técnicop logado*/
 
   const nivelDoUsuario = usuarioLogado?.role?.startsWith("TECNICO")
     ? usuarioLogado.role.replace("TECNICO_", "")
@@ -80,14 +80,14 @@ export default function ChamadoCard({ chamado, usuarioLogado, onEscalar, onAtual
   const isTecnico = !!nivelDoUsuario;
 
 
-/* Só pode agir quem for do nível atual do chamado ou quem é responsável */ 
+  /* Só pode agir quem for do nível atual do chamado ou quem é responsável */
 
   const ehTecnicoResponsavel = chamado.technician?.id === usuarioLogado?.id;
   const estaNoNivelDoChamado = nivelDoUsuario === chamado.currentLevel;
   const podeAgir = isTecnico && (estaNoNivelDoChamado || ehTecnicoResponsavel);
 
 
-  const podeEscalar = isTecnico && chamado.currentLevel !== "N3";
+  const podeEscalar = podeAgir && chamado.currentLevel !== "N3";
   const chamadoEncerrado = chamado.status === "CANCELADO" || chamado.status === "FINALIZADO";
 
   return (
@@ -133,7 +133,7 @@ export default function ChamadoCard({ chamado, usuarioLogado, onEscalar, onAtual
         />
       )}
 
-      {isTecnico && !chamadoEncerrado && (
+      {podeAgir && !chamadoEncerrado && (
         <div className="chamado-card-actions">
           {!chamado.technician && (
             <div className="chamado-card-action">
@@ -191,7 +191,7 @@ export default function ChamadoCard({ chamado, usuarioLogado, onEscalar, onAtual
           </div>
         </div>
       )}
-      {isTecnico && !podeAgir && !chamadoEncerrado &&(
+      {isTecnico && !podeAgir && !chamadoEncerrado && (
         <p className="chamado-card-nivel-maximo">
           Este chamado está em atendimento no nível {chamado.currentLevel}.
           Você pode comentar, mas não alterar.
