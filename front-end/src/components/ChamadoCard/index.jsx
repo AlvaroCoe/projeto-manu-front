@@ -3,7 +3,10 @@ import { toast } from "react-toastify";
 import api, { API_BASE_URL } from "../../services/api";
 import "./style.css";
 
-export default function ChamadoCard({ chamado, usuarioLogado, onEscalar, onAtualizarStatus, onPegar, onCancelar }) {
+export default function ChamadoCard({
+  chamado, isTecnico, nivelDoUsuario, usuarioId,
+  onEscalar, onAtualizarStatus, onPegar, onCancelar
+}) {
   const [motivo, setMotivo] = useState("");
   const [erroMotivo, setErroMotivo] = useState("");
   const [novoStatus, setNovoStatus] = useState("");
@@ -49,7 +52,7 @@ export default function ChamadoCard({ chamado, usuarioLogado, onEscalar, onAtual
         const response = await api.get(`/tickets/${chamado.id}/comments`);
         setComentarios(response.data);
         setComentariosCarregados(true);
-      } catch {
+      } catch (error) {
         toast.error("Erro ao carregar comentários");
       }
     }
@@ -72,22 +75,10 @@ export default function ChamadoCard({ chamado, usuarioLogado, onEscalar, onAtual
     }
   }
 
-  /* Nível do técnicop logado*/
-
-  const nivelDoUsuario = usuarioLogado?.role?.startsWith("TECNICO")
-    ? usuarioLogado.role.replace("TECNICO_", "")
-    : null;
-  const isTecnico = !!nivelDoUsuario;
-
-
-  /* Só pode agir quem for do nível atual do chamado ou quem é responsável */
-
-  const ehTecnicoResponsavel = chamado.technician?.id === usuarioLogado?.id;
-  const estaNoNivelDoChamado = nivelDoUsuario === chamado.currentLevel;
-  const podeAgir = isTecnico && (estaNoNivelDoChamado || ehTecnicoResponsavel);
-
-
-  const podeEscalar = podeAgir && chamado.currentLevel !== "N3";
+  const souOResponsavel = chamado.technician && chamado.technician.id === usuarioId;
+  const podeAgirNoChamado = isTecnico && (chamado.currentLevel === nivelDoUsuario || souOResponsavel);
+  const podeAssumir = isTecnico && !chamado.technician && chamado.currentLevel === nivelDoUsuario;
+  const podeEscalar = podeAgirNoChamado && chamado.currentLevel !== "N3";
   const chamadoEncerrado = chamado.status === "CANCELADO" || chamado.status === "FINALIZADO";
 
   return (
@@ -133,70 +124,69 @@ export default function ChamadoCard({ chamado, usuarioLogado, onEscalar, onAtual
         />
       )}
 
-      {podeAgir && !chamadoEncerrado && (
-        <div className="chamado-card-actions">
-          {!chamado.technician && (
+      {isTecnico && !chamadoEncerrado && (
+        podeAgirNoChamado ? (
+          <div className="chamado-card-actions">
+            {podeAssumir && (
+              <div className="chamado-card-action">
+                <button type="button" onClick={() => onPegar(chamado.id)}>
+                  Assumir chamado
+                </button>
+              </div>
+            )}
+
+            {podeEscalar ? (
+              <div className="chamado-card-action">
+                <input
+                  type="text"
+                  placeholder="Motivo do escalonamento"
+                  value={motivo}
+                  onChange={(e) => {
+                    setMotivo(e.target.value);
+                    if (erroMotivo) setErroMotivo("");
+                  }}
+                />
+                {erroMotivo && <span className="error">{erroMotivo}</span>}
+                <button type="button" onClick={handleEscalar}>
+                  Encaminhar para próximo nível
+                </button>
+              </div>
+            ) : (
+              chamado.currentLevel === "N3" && (
+                <p className="chamado-card-nivel-maximo">
+                  Você já está no nível mais alto (N3).
+                </p>
+              )
+            )}
+
             <div className="chamado-card-action">
-              <button type="button" onClick={() => onPegar(chamado.id)}>
-                Assumir chamado
+              <select value={novoStatus} onChange={(e) => setNovoStatus(e.target.value)}>
+                <option value="">Alterar status para...</option>
+                <option value="ANDAMENTO">Em andamento</option>
+                <option value="FINALIZADO">Finalizado</option>
+              </select>
+              <button type="button" onClick={handleAtualizarStatus} disabled={!novoStatus}>
+                Atualizar status
               </button>
             </div>
-          )}
 
-          {podeEscalar ? (
-            <div className="chamado-card-action">
+            <div className="chamado-card-action chamado-card-cancelar">
               <input
                 type="text"
-                placeholder="Motivo do escalonamento"
-                value={motivo}
-                onChange={(e) => {
-                  setMotivo(e.target.value);
-                  if (erroMotivo) setErroMotivo("");
-                }}
+                placeholder="Motivo do cancelamento"
+                value={motivoCancelamento}
+                onChange={(e) => setMotivoCancelamento(e.target.value)}
               />
-              {erroMotivo && <span className="error">{erroMotivo}</span>}
-              <button type="button" onClick={handleEscalar}>
-                Encaminhar para próximo nível
+              <button type="button" className="btn-cancelar" onClick={handleCancelar}>
+                Cancelar chamado
               </button>
             </div>
-          ) : (
-            chamado.currentLevel === "N3" && (
-              <p className="chamado-card-nivel-maximo">
-                O chamado já está no nível mais alto (N3).
-              </p>
-            )
-          )}
-
-          <div className="chamado-card-action">
-            <select value={novoStatus} onChange={(e) => setNovoStatus(e.target.value)}>
-              <option value="">Alterar status para...</option>
-              <option value="ANDAMENTO">Em andamento</option>
-              <option value="FINALIZADO">Finalizado</option>
-            </select>
-            <button type="button" onClick={handleAtualizarStatus} disabled={!novoStatus}>
-              Atualizar status
-            </button>
           </div>
-
-          <div className="chamado-card-action chamado-card-cancelar">
-            <input
-              type="text"
-              placeholder="Motivo do cancelamento"
-              value={motivoCancelamento}
-              onChange={(e) => setMotivoCancelamento(e.target.value)}
-            />
-            <button type="button" className="btn-cancelar" onClick={handleCancelar}>
-              Cancelar chamado
-            </button>
-          </div>
-        </div>
-      )}
-      {isTecnico && !podeAgir && !chamadoEncerrado && (
-        <p className="chamado-card-nivel-maximo">
-          Este chamado está em atendimento no nível {chamado.currentLevel}.
-          Você pode comentar, mas não alterar.
-
-        </p>
+        ) : (
+          <p className="chamado-card-nivel-maximo">
+            Você pode acompanhar este chamado, mas as ações só são permitidas para técnicos do nível {chamado.currentLevel} ou pelo técnico responsável.
+          </p>
+        )
       )}
 
       {chamadoEncerrado && (
