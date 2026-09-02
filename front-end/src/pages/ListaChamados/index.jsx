@@ -12,12 +12,13 @@ export default function ListaChamados() {
 
   async function carregarChamados() {
     try {
-      // SOLICITANTE vê só os próprios chamados; TÉCNICO vê a fila do seu nível de suporte
       const params = {};
+
+      // Solicitante só vê os próprios chamados. Técnicos de QUALQUER nível
+      // veem todos os chamados — a restrição de nível só entra na hora de
+      // agir (assumir/escalar/status/cancelar), não na hora de visualizar.
       if (user?.role === "SOLICITANTE") {
         params.clientId = user.id;
-      } else if (user?.role?.startsWith("TECNICO")) {
-        params.nivel = user.role.replace("TECNICO_", "");
       }
 
       const response = await api.get("/tickets", { params });
@@ -30,9 +31,8 @@ export default function ListaChamados() {
   }
 
   useEffect(() => {
-    if (user) carregarChamados();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [user]);
+    carregarChamados();
+  }, []);
 
   async function escalarChamado(id, motivo) {
     try {
@@ -89,7 +89,9 @@ export default function ListaChamados() {
           <ChamadoCard
             key={chamado.id}
             chamado={chamado}
-            usuarioLogado={user}
+            isTecnico={user?.role?.startsWith("TECNICO")}
+            nivelDoUsuario={user?.role?.replace("TECNICO_", "")}
+            usuarioId={user?.id}
             onEscalar={escalarChamado}
             onAtualizarStatus={atualizarStatus}
             onPegar={pegarChamado}
