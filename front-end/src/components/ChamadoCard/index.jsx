@@ -4,7 +4,7 @@ import api, { API_BASE_URL } from "../../services/api";
 import "./style.css";
 
 export default function ChamadoCard({
-  chamado, isTecnico, nivelDoUsuario, usuarioId,
+  chamado, isTecnico, isAdmin, nivelDoUsuario, usuarioId,
   onEscalar, onAtualizarStatus, onPegar, onCancelar
 }) {
   const [motivo, setMotivo] = useState("");
@@ -75,9 +75,10 @@ export default function ChamadoCard({
     }
   }
 
+  const podeVerAcoes = isTecnico || isAdmin;
   const souOResponsavel = chamado.technician && chamado.technician.id === usuarioId;
-  const podeAgirNoChamado = isTecnico && (chamado.currentLevel === nivelDoUsuario || souOResponsavel);
-  const podeAssumir = isTecnico && !chamado.technician && chamado.currentLevel === nivelDoUsuario;
+  const podeAgirNoChamado = isAdmin || (isTecnico && (chamado.currentLevel === nivelDoUsuario || souOResponsavel));
+  const podeAssumir = podeVerAcoes && !chamado.technician && (isAdmin || chamado.currentLevel === nivelDoUsuario);
   const podeEscalar = podeAgirNoChamado && chamado.currentLevel !== "N3";
   const chamadoEncerrado = chamado.status === "CANCELADO" || chamado.status === "FINALIZADO";
 
@@ -124,7 +125,7 @@ export default function ChamadoCard({
         />
       )}
 
-      {isTecnico && !chamadoEncerrado && (
+      {podeVerAcoes && !chamadoEncerrado && (
         podeAgirNoChamado ? (
           <div className="chamado-card-actions">
             {podeAssumir && (

@@ -87,16 +87,17 @@ export default function ListaChamados() {
       <div className="chamados-grid">
         {chamados.map((chamado) => (
           <ChamadoCard
-            key={chamado.id}
-            chamado={chamado}
-            isTecnico={user?.role?.startsWith("TECNICO")}
-            nivelDoUsuario={user?.role?.replace("TECNICO_", "")}
-            usuarioId={user?.id}
-            onEscalar={escalarChamado}
-            onAtualizarStatus={atualizarStatus}
-            onPegar={pegarChamado}
-            onCancelar={cancelarChamado}
-          />
+  key={chamado.id}
+  chamado={chamado}
+  isTecnico={user?.role?.startsWith("TECNICO")}
+  isAdmin={user?.role === "ADMIN"}
+  nivelDoUsuario={user?.role?.replace("TECNICO_", "")}
+  usuarioId={user?.id}
+  onEscalar={escalarChamado}
+  onAtualizarStatus={atualizarStatus}
+  onPegar={pegarChamado}
+  onCancelar={cancelarChamado}
+/>
         ))}
       </div>
     </div>

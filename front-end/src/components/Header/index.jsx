@@ -21,6 +21,7 @@ export default function Header() {
         <nav className="header-nav">
           <Link to="/">Abrir Chamado</Link>
           <Link to="/chamados">Meus Chamados</Link>
+          {user.role === "ADMIN" && <Link to="/admin/funcionarios">Administração</Link>}
         </nav>
       )}
 
