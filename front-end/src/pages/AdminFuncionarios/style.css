@@ -1,0 +1,120 @@
+.admin-funcionarios {
+  width: 100%;
+  padding: var(--spacing-md);
+}
+
+.admin-funcionarios h2 {
+  font-size: 1.4rem;
+  margin-bottom: var(--spacing-md);
+}
+
+.admin-card {
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: var(--spacing-md);
+  margin-bottom: var(--spacing-lg);
+}
+
+.admin-card h3 {
+  font-size: 1.05rem;
+  margin-bottom: var(--spacing-sm);
+}
+
+.admin-form-inline {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-sm);
+}
+
+.admin-form-inline input,
+.admin-form-inline select {
+  padding: 9px 12px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  font-size: 0.9rem;
+  flex: 1;
+  min-width: 150px;
+}
+
+.admin-form-inline button {
+  padding: 9px 18px;
+  background-color: var(--color-primary);
+  color: white;
+  border: none;
+  border-radius: var(--radius-sm);
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.admin-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+}
+
+.admin-table th {
+  text-align: left;
+  padding: 10px;
+  border-bottom: 2px solid var(--color-border);
+  color: var(--color-text-muted);
+  font-size: 0.8rem;
+  text-transform: uppercase;
+}
+
+.admin-table td {
+  padding: 10px;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.admin-table input,
+.admin-table select {
+  padding: 6px 8px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  font-size: 0.85rem;
+  width: 100%;
+}
+
+.admin-badge {
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 3px 10px;
+  border-radius: var(--radius-sm);
+}
+
+.admin-badge.ativo {
+  background-color: #dcfce7;
+  color: var(--color-success);
+}
+
+.admin-badge.inativo {
+  background-color: #f1f5f9;
+  color: var(--color-text-muted);
+}
+
+.admin-acoes {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.admin-acoes button {
+  padding: 6px 12px;
+  border: none;
+  border-radius: var(--radius-sm);
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  background-color: var(--color-primary);
+  color: white;
+}
+
+.admin-btn-secundario {
+  background-color: var(--color-border) !important;
+  color: var(--color-text) !important;
+}
+
+.admin-btn-perigo {
+  background-color: var(--color-danger) !important;
+}
