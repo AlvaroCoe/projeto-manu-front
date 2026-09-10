@@ -1,7 +1,7 @@
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import api from "../../services/api";
 import { useAuth } from "../../contexts/AuthContext";
@@ -26,13 +26,13 @@ export default function Login() {
   async function onSubmit(data) {
     try {
       const response = await api.post("/auth/login", data);
-      
+
       // Separa o token do restante dos dados do usuário (id, nome, email, role)
       const { token, ...userData } = response.data;
-      
+
       // Envia o objeto do usuário e o token separadamente
       login(userData, token);
-      
+
       toast.success("Login realizado com sucesso!");
       navigate("/");
     } catch (error) {
@@ -56,6 +56,8 @@ export default function Login() {
         </div>
 
         <button type="submit">Entrar</button>
+
+        <Link to="/esqueci-senha">Esqueci minha senha</Link>
       </form>
     </div>
   );
