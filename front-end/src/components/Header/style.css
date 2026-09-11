@@ -70,3 +70,13 @@
     font-size: 1.25rem;
   }
 }
+
+.header-logo {
+  text-decoration: none;
+  color: inherit;
+  cursor: pointer;
+}
+
+.header-logo h1 {
+  color: #2563eb;
+}
