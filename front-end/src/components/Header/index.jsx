@@ -13,16 +13,19 @@ export default function Header() {
 
   return (
     <header className="header">
-      <div className="header-logo">
+      <Link to="/" className="header-logo">
         <h1>Help Desk TI</h1>
-      </div>
+      </Link>
 
       {user && (
         <nav className="header-nav">
           <Link to="/">Abrir Chamado</Link>
           <Link to="/chamados">Meus Chamados</Link>
           <Link to="/alterar-senha">Alterar Senha</Link>
-          {user.role === "ADMIN" && <Link to="/admin/funcionarios">Administração</Link>}
+
+          {user.role === "ADMIN" && (
+            <Link to="/admin/funcionarios">Administração</Link>
+          )}
         </nav>
       )}
 
