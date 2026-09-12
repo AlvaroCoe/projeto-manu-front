@@ -30,17 +30,17 @@
 }
 
 .prioridade-baixa {
-  background-color: #dcfce7;
+  background-color: var(--badge-success-bg);
   color: var(--color-success);
 }
 
 .prioridade-media {
-  background-color: #fef9c3;
-  color: #a16207;
+  background-color: var(--badge-warning-bg);
+  color: var(--badge-warning-text);
 }
 
 .prioridade-alta {
-  background-color: #fee2e2;
+  background-color: var(--badge-danger-bg);
   color: var(--color-danger);
 }
 
@@ -183,11 +183,11 @@
 }
 
 .sla-no-prazo {
-  background-color: #dcfce7;
+  background-color: var(--badge-success-bg);
   color: var(--color-success);
 }
 
 .sla-atrasado {
-  background-color: #fee2e2;
+  background-color: var(--badge-danger-bg);
   color: var(--color-danger);
 }
