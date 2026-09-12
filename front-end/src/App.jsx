@@ -9,7 +9,7 @@ import Footer from "./components/Footer";
 import Login from "./pages/Login";
 import ForgotPassword from "./pages/ForgotPassword";
 import ResetPassword from "./pages/ResetPassword";
-import AlterarSenha from "./pages/AlterarSenha";
+import MinhaConta from "./pages/MinhaConta";
 import HomePage from "./pages/HomePage";
 import ListaChamados from "./pages/ListaChamados";
 import AdminFuncionarios from "./pages/AdminFuncionarios";
@@ -29,7 +29,7 @@ export default function App() {
                 <Route path="/redefinir-senha" element={<ResetPassword />} />
                 <Route path="/" element={<PrivateRoute><HomePage /></PrivateRoute>} />
                 <Route path="/chamados" element={<PrivateRoute><ListaChamados /></PrivateRoute>} />
-                <Route path="/alterar-senha" element={<PrivateRoute><AlterarSenha /></PrivateRoute>} />
+                <Route path="/minha-conta" element={<PrivateRoute><MinhaConta /></PrivateRoute>} />
                 <Route path="/admin/funcionarios" element={<AdminRoute><AdminFuncionarios /></AdminRoute>} />
               </Routes>
             </main>
