@@ -27,8 +27,18 @@ export function AuthProvider({ children }) {
     setUser(null);
   }
 
+  // Atualiza os dados do usuário logado (ex: depois de editar nome/e-mail)
+  // sem precisar deslogar e logar de novo.
+  function updateUser(newData) {
+    setUser((prev) => {
+      const updated = { ...prev, ...newData };
+      localStorage.setItem("user", JSON.stringify(updated));
+      return updated;
+    });
+  }
+
   return (
-    <AuthContext.Provider value={{ user, login, logout }}>
+    <AuthContext.Provider value={{ user, login, logout, updateUser }}>
       {children}
     </AuthContext.Provider>
   );
