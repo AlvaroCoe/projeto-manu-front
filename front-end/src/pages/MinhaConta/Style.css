@@ -1,0 +1,359 @@
+.minha-conta-page {
+    width: 100%;
+    padding: var(--spacing-md);
+    display: flex;
+    justify-content: center;
+}
+
+.minha-conta-container {
+    width: 100%;
+    max-width: 900px;
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-lg);
+}
+
+/* ---------- Sidebar ---------- */
+
+.conta-sidebar {
+    background-color: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    padding: var(--spacing-lg);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}
+
+.conta-avatar {
+    width: 72px;
+    height: 72px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--color-primary), var(--color-primary-dark));
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.4rem;
+    font-weight: 700;
+    margin-bottom: var(--spacing-sm);
+}
+
+.conta-nome {
+    font-size: 1.1rem;
+    color: var(--color-text);
+}
+
+.conta-email {
+    font-size: 0.85rem;
+    color: var(--color-text-muted);
+    margin-bottom: var(--spacing-sm);
+    word-break: break-all;
+}
+
+.conta-badge {
+    display: inline-block;
+    padding: 4px 12px;
+    border-radius: 999px;
+    font-size: 0.68rem;
+    font-weight: 700;
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+    background-color: var(--color-primary);
+    color: #fff;
+    margin-bottom: var(--spacing-md);
+}
+
+.conta-badge.role-admin { background-color: var(--color-primary); }
+.conta-badge.role-solicitante { background-color: var(--color-secondary); }
+.conta-badge.role-tecnico_n1 { background-color: #0ea5e9; }
+.conta-badge.role-tecnico_n2 { background-color: #8b5cf6; }
+.conta-badge.role-tecnico_n3 { background-color: #f59e0b; }
+
+.conta-tabs {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-xs);
+    border-top: 1px solid var(--color-border);
+    padding-top: var(--spacing-md);
+}
+
+.conta-tab {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    width: 100%;
+    padding: 10px 12px;
+    border: none;
+    background-color: transparent;
+    border-radius: var(--radius-sm);
+    color: var(--color-text-muted);
+    font-weight: 500;
+    font-size: 0.95rem;
+    cursor: pointer;
+    text-align: left;
+    transition: background-color 0.15s, color 0.15s;
+}
+
+.conta-tab:hover {
+    background-color: var(--color-bg);
+    color: var(--color-text);
+}
+
+.conta-tab.active {
+    background-color: rgba(37, 99, 235, 0.1);
+    color: var(--color-primary);
+}
+
+/* ---------- Content ---------- */
+
+.conta-content {
+    display: flex;
+    flex-direction: column;
+}
+
+.conta-card {
+    background-color: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    padding: var(--spacing-lg);
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-md);
+}
+
+.conta-card h3 {
+    font-size: 1.2rem;
+    color: var(--color-text);
+}
+
+.conta-subtitle {
+    font-size: 0.85rem;
+    color: var(--color-text-muted);
+    margin-top: -8px;
+}
+
+.info-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--spacing-md);
+}
+
+.info-item {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    padding: var(--spacing-sm) var(--spacing-md);
+    background-color: var(--color-bg);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-sm);
+}
+
+.info-label {
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--color-text-muted);
+    font-weight: 600;
+}
+
+.info-value {
+    font-size: 0.95rem;
+    color: var(--color-text);
+    font-weight: 500;
+}
+
+.status-ativo {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    color: var(--color-success);
+}
+
+.status-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background-color: var(--color-success);
+    display: inline-block;
+}
+
+.conta-hint {
+    font-size: 0.8rem;
+    color: var(--color-text-muted);
+    background-color: var(--color-bg);
+    border-left: 3px solid var(--color-primary);
+    padding: var(--spacing-sm) var(--spacing-md);
+    border-radius: var(--radius-sm);
+}
+
+/* ---------- Form (Segurança) ---------- */
+
+.senha-form {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-md);
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-xs);
+}
+
+.form-group label {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--color-text);
+}
+
+.input-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.input-wrapper input {
+    width: 100%;
+    padding: 10px 40px 10px 12px;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-sm);
+    font-size: 1rem;
+    outline: none;
+    transition: border-color 0.2s;
+}
+
+.input-wrapper input:focus {
+    border-color: var(--color-primary);
+}
+
+.toggle-visibility {
+    position: absolute;
+    right: 8px;
+    background-color: transparent;
+    border: none;
+    color: var(--color-text-muted);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    padding: 4px;
+}
+
+.toggle-visibility:hover {
+    color: var(--color-primary);
+}
+
+.error {
+    color: var(--color-danger);
+    font-size: 0.8rem;
+}
+
+.strength-wrapper {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    margin-top: 2px;
+}
+
+.strength-bar {
+    display: flex;
+    gap: 4px;
+    flex: 1;
+}
+
+.strength-bar span {
+    height: 5px;
+    flex: 1;
+    border-radius: 3px;
+    background-color: var(--color-border);
+}
+
+.strength-bar.strength-1 span:nth-child(1) {
+    background-color: var(--color-danger);
+}
+
+.strength-bar.strength-2 span:nth-child(1),
+.strength-bar.strength-2 span:nth-child(2) {
+    background-color: #f59e0b;
+}
+
+.strength-bar.strength-3 span {
+    background-color: var(--color-success);
+}
+
+.strength-label {
+    font-size: 0.75rem;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+.strength-label-1 { color: var(--color-danger); }
+.strength-label-2 { color: #f59e0b; }
+.strength-label-3 { color: var(--color-success); }
+
+.btn-salvar {
+    width: 100%;
+    padding: 12px;
+    background-color: var(--color-primary);
+    color: white;
+    border: none;
+    border-radius: var(--radius-sm);
+    font-weight: 600;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    margin-top: var(--spacing-xs);
+}
+
+.btn-salvar:hover:not(:disabled) {
+    background-color: var(--color-primary-dark);
+}
+
+.btn-salvar:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+}
+
+/* ---------- Responsivo ---------- */
+
+@media (min-width: 600px) {
+    .info-grid {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+@media (min-width: 768px) {
+    .minha-conta-container {
+        display: grid;
+        grid-template-columns: 260px 1fr;
+        align-items: start;
+    }
+
+    .conta-sidebar {
+        position: sticky;
+        top: var(--spacing-lg);
+    }
+}
+
+.perfil-form {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-md);
+}
+
+.perfil-form .form-group input {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-sm);
+    font-size: 0.95rem;
+    outline: none;
+    background-color: var(--color-surface);
+    transition: border-color 0.2s;
+}
+
+.perfil-form .form-group input:focus {
+    border-color: var(--color-primary);
+}
