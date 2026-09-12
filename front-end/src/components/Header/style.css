@@ -9,7 +9,6 @@
 }
 
 .header-logo h1 {
-  font-size: 1.1rem;
   color: var(--color-primary);
 }
 
@@ -55,6 +54,20 @@
   cursor: pointer;
   color: var(--color-danger);
   font-weight: 500;
+}
+
+.theme-toggle {
+  color: var(--color-text) !important;
+  font-size: 1rem;
+  line-height: 1;
+  padding: 6px 10px !important;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.theme-toggle:hover {
+  border-color: var(--color-primary) !important;
 }
 
 /* A partir de tablets (768px+), Header vira uma linha horizontal */

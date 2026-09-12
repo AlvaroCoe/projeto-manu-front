@@ -13,28 +13,31 @@ import AlterarSenha from "./pages/AlterarSenha";
 import HomePage from "./pages/HomePage";
 import ListaChamados from "./pages/ListaChamados";
 import AdminFuncionarios from "./pages/AdminFuncionarios";
+import { ThemeProvider } from "./contexts/ThemeContext";
 
 export default function App() {
   return (
-    <AuthProvider>
-      <BrowserRouter>
-        <div className="app-shell">
-          <Header />
-          <main className="app-main">
-            <Routes>
-              <Route path="/login" element={<Login />} />
-              <Route path="/esqueci-senha" element={<ForgotPassword />} />
-              <Route path="/redefinir-senha" element={<ResetPassword />} />
-              <Route path="/" element={<PrivateRoute><HomePage /></PrivateRoute>} />
-              <Route path="/chamados" element={<PrivateRoute><ListaChamados /></PrivateRoute>} />
-              <Route path="/alterar-senha" element={<PrivateRoute><AlterarSenha /></PrivateRoute>} />
-              <Route path="/admin/funcionarios" element={<AdminRoute><AdminFuncionarios /></AdminRoute>} />
-            </Routes>
-          </main>
-          <Footer />
-        </div>
-        <ToastContainer position="top-right" />
-      </BrowserRouter>
-    </AuthProvider>
+    <ThemeProvider>
+      <AuthProvider>
+        <BrowserRouter>
+          <div className="app-shell">
+            <Header />
+            <main className="app-main">
+              <Routes>
+                <Route path="/login" element={<Login />} />
+                <Route path="/esqueci-senha" element={<ForgotPassword />} />
+                <Route path="/redefinir-senha" element={<ResetPassword />} />
+                <Route path="/" element={<PrivateRoute><HomePage /></PrivateRoute>} />
+                <Route path="/chamados" element={<PrivateRoute><ListaChamados /></PrivateRoute>} />
+                <Route path="/alterar-senha" element={<PrivateRoute><AlterarSenha /></PrivateRoute>} />
+                <Route path="/admin/funcionarios" element={<AdminRoute><AdminFuncionarios /></AdminRoute>} />
+              </Routes>
+            </main>
+            <Footer />
+          </div>
+          <ToastContainer position="top-right" />
+        </BrowserRouter>
+      </AuthProvider>
+    </ThemeProvider>
   );
 }

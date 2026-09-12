@@ -1,9 +1,11 @@
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../../contexts/AuthContext";
+import { useTheme } from "../../contexts/ThemeContext";
 import "./style.css";
 
 export default function Header() {
   const { user, logout } = useAuth();
+  const { theme, toggleTheme } = useTheme();
   const navigate = useNavigate();
 
   function handleLogout() {
@@ -29,13 +31,25 @@ export default function Header() {
         </nav>
       )}
 
-      {user && (
-        <div className="header-user">
-          <span>Olá, {user.nome}</span>
-          <span className="header-badge">{user.role}</span>
-          <button onClick={handleLogout}>Sair</button>
-        </div>
-      )}
+      <div className="header-user">
+        <button
+          type="button"
+          className="theme-toggle"
+          onClick={toggleTheme}
+          aria-label={theme === "dark" ? "Ativar modo claro" : "Ativar modo escuro"}
+          title={theme === "dark" ? "Ativar modo claro" : "Ativar modo escuro"}
+        >
+          {theme === "dark" ? "☀️" : "🌙"}
+        </button>
+
+        {user && (
+          <>
+            <span>Olá, {user.nome}</span>
+            <span className="header-badge">{user.role}</span>
+            <button onClick={handleLogout}>Sair</button>
+          </>
+        )}
+      </div>
     </header>
   );
 }

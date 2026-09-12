@@ -84,12 +84,12 @@
 }
 
 .admin-badge.ativo {
-  background-color: #dcfce7;
+  background-color: var(--badge-success-bg);
   color: var(--color-success);
 }
 
 .admin-badge.inativo {
-  background-color: #f1f5f9;
+  background-color: var(--badge-neutral-bg);
   color: var(--color-text-muted);
 }
 
