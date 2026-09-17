@@ -13,12 +13,18 @@ const schema = yup.object({
   descricao: yup.string().required("Descreva o problema"),
   prioridade: yup.string().required("Selecione a prioridade"),
   equipamentoId: yup.string().required("Selecione o equipamento"),
+  equipamentoDescricaoLivre: yup.string().when("equipamentoId", {
+    is: "OUTRO",
+    then: (s) => s.required("Descreva o equipamento"),
+    otherwise: (s) => s.notRequired(),
+  }),
 });
 
 export default function HomePage() {
   const {
     register,
     handleSubmit,
+    watch,
     formState: { errors },
     reset,
   } = useForm({
@@ -30,6 +36,8 @@ export default function HomePage() {
   const [equipamentos, setEquipamentos] = useState([]);
   const [loadingEquipamentos, setLoadingEquipamentos] = useState(true);
   const [enviando, setEnviando] = useState(false);
+
+  const equipamentoSelecionado = watch("equipamentoId");
 
   useEffect(() => {
     async function carregarEquipamentos() {
@@ -66,12 +74,15 @@ export default function HomePage() {
         imageUrl = uploadResponse.data.url;
       }
 
+      const usandoOutro = data.equipamentoId === "OUTRO";
+
       const payload = {
         titulo: data.titulo,
         descricao: data.descricao,
         prioridade: data.prioridade,
         clientId: user?.id,
-        equipamentoId: Number(data.equipamentoId),
+        equipamentoId: usandoOutro ? null : Number(data.equipamentoId),
+        equipamentoDescricaoLivre: usandoOutro ? data.equipamentoDescricaoLivre : null,
         imageUrl,
       };
 
@@ -135,9 +146,24 @@ export default function HomePage() {
                 {equipamento.nome} - {equipamento.codigoPatrimonio}
               </option>
             ))}
+            <option value="OUTRO">Outro (não está na lista — digitar)</option>
           </select>
           {errors.equipamentoId && <span className="error">{errors.equipamentoId.message}</span>}
         </div>
+
+        {equipamentoSelecionado === "OUTRO" && (
+          <div className="form-group">
+            <label htmlFor="equipamentoDescricaoLivre">Descreva o equipamento</label>
+            <input
+              id="equipamentoDescricaoLivre"
+              placeholder="Ex: Notebook pessoal Acer, ainda não cadastrado"
+              {...register("equipamentoDescricaoLivre")}
+            />
+            {errors.equipamentoDescricaoLivre && (
+              <span className="error">{errors.equipamentoDescricaoLivre.message}</span>
+            )}
+          </div>
+        )}
 
         <div className="form-group">
           <label htmlFor="foto">Foto do problema (opcional)</label>
