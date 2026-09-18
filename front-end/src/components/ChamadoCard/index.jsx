@@ -110,6 +110,16 @@ export default function ChamadoCard({
             minute: "2-digit",
           })}
         </p>
+
+        {(chamado.equipamento || chamado.equipamentoDescricaoLivre) && (
+          <p>
+            <strong>Equipamento:</strong>{" "}
+            {chamado.equipamento
+              ? `${chamado.equipamento.nome} - ${chamado.equipamento.codigoPatrimonio}`
+              : chamado.equipamentoDescricaoLivre}
+          </p>
+        )}
+
         <p className="chamado-card-tecnico">
           {chamado.technician
             ? `Responsável: ${chamado.technician.nome}`

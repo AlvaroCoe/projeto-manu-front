@@ -95,3 +95,9 @@
     padding: var(--spacing-xl);
   }
 }
+
+field-help {
+color: var(--color-text-muted, #667085);
+font-size: 0.8rem;
+margin-top: 2px;
+}
