@@ -5,7 +5,7 @@ import * as yup from "yup";
 import { toast } from "react-toastify";
 import api from "../../services/api";
 import { useAuth } from "../../contexts/AuthContext";
-import "./style.css";
+import "./Style.css";
 
 const ROLE_LABELS = {
     SOLICITANTE: "Solicitante",
